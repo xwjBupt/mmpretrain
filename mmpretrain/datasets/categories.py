@@ -1,6 +1,9 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 # Pre-defined categories names of various datasets.
 
+STAMP_CATEGORIES = ('guangmin','huimo','jiguangdiaoke','muzhang_yinni','muzhang_yinyou','tongzhang_yinni','tongzhang_yinyou','xiangjiao_yinni','xiangjiao_yinyou')
+
+
 VOC2007_CATEGORIES = ('aeroplane', 'bicycle', 'bird', 'boat', 'bottle', 'bus',
                       'car', 'cat', 'chair', 'cow', 'diningtable', 'dog',
                       'horse', 'motorbike', 'person', 'pottedplant', 'sheep',
