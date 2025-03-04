@@ -81,11 +81,14 @@ class STAMP(BaseDataset):
         pairs = list_from_file(self.ann_file)
         data_list = []
         for pair in pairs:
-            class_name, img_name = pair.split('/')
+            class_name, img_name = pair.strip().split('/')
             img_name = f'{img_name}.jpg'
             img_path = self.backend.join_path(self.img_prefix, class_name,
                                               img_name)
-            gt_label = self.METAINFO['classes'].index(class_name)
+            try:
+                gt_label = self.METAINFO['classes'].index(class_name)
+            except Exception as e:
+                print (class_name)
             info = dict(img_path=img_path, gt_label=gt_label)
             data_list.append(info)
         return data_list

@@ -1,14 +1,12 @@
 # dataset settings
 dataset_type = 'STAMP'
 data_preprocessor = dict(
-    num_classes=10,
-    # RGB format normalization parameters
-    mean=[123.675, 116.28, 103.53],
-    std=[58.395, 57.12, 57.375],
-    # convert image from BGR to RGB
+    num_classes=9,
+    mean=[234.30045203, 225.71031344, 235.95306603],
+    std=[8.5827689, 35.25244448,38.0740568 ],
     to_rgb=True,
 )
-
+fold = '0'
 train_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(type='RandomResizedCrop', scale=224),
@@ -20,32 +18,29 @@ test_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(type='ResizeEdge', scale=256, edge='short'),
     dict(type='CenterCrop', crop_size=224),
-    dict(
-        type='PackInputs',
-        # `gt_label_difficult` is needed for VOC evaluation
-        meta_keys=('sample_idx', 'img_path', 'ori_shape', 'img_shape',
-                   'scale_factor', 'flip', 'flip_direction',
-                   'gt_label_difficult')),
+    dict(type='PackInputs'),
 ]
 
 train_dataloader = dict(
-    batch_size=16,
-    num_workers=5,
+    batch_size=32,
+    num_workers=8,
     dataset=dict(
         type=dataset_type,
-        data_root='data/VOC2007',
-        split='trainval',
+        data_root='/home/wjx/data/dataset/STAMP/processed',
+        split='train',
+        fold = fold,
         pipeline=train_pipeline),
     sampler=dict(type='DefaultSampler', shuffle=True),
 )
 
 val_dataloader = dict(
-    batch_size=16,
-    num_workers=5,
+    batch_size=32,
+    num_workers=8,
     dataset=dict(
         type=dataset_type,
-        data_root='data/VOC2007',
+        data_root='/home/wjx/data/dataset/STAMP/processed',
         split='test',
+        fold = fold,
         pipeline=test_pipeline),
     sampler=dict(type='DefaultSampler', shuffle=False),
 )
@@ -53,11 +48,6 @@ val_dataloader = dict(
 test_dataloader = val_dataloader
 
 # calculate precision_recall_f1 and mAP
-val_evaluator = [
-    dict(type='VOCMultiLabelMetric'),
-    dict(type='VOCMultiLabelMetric', average='micro'),
-    dict(type='VOCAveragePrecision')
-]
-
+val_evaluator = dict(type='Accuracy', topk=(1, 3))
 test_dataloader = val_dataloader
 test_evaluator = val_evaluator
