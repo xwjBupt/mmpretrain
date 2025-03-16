@@ -6,7 +6,7 @@ data_preprocessor = dict(
     std=[8.5827689, 35.25244448,38.0740568 ],
     to_rgb=True,
 )
-fold = '0'
+fold = '2'
 train_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(type='RandomResizedCrop', scale=224),
